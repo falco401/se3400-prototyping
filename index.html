@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f2f3f5">
+<title>Smart Cycling Helmet – Interactive Prototype</title>
+<meta name="description" content="High-fidelity interactive prototype of a heads-up-display cycling helmet: 3D model, rider view, companion app.">
+<script>(function(){var t=null;try{t=localStorage.getItem("helmet-theme")}catch(e){}if(!t)t=window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.setAttribute("data-theme",t)})();</script>
+<link rel="stylesheet" href="css/style.css?v=44">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="logo"><svg class="i" viewBox="0 0 24 24" style="stroke:#04121a"><path d="M3 15a9 9 0 0 1 18 0v2H3z"/><path d="M8 13h8"/></svg></span>
+    Smart Cycling Helmet <small>interactive prototype</small>
+  </div>
+  <div class="sp"></div>
+  <a class="link-btn" href="wireframe.html">Wireframe</a>
+  <button class="link-btn theme-toggle" id="themeBtn" data-act="theme" aria-label="Switch colour theme">Dark mode</button>
+  <button class="link-btn demo-toggle" id="demoBtn" data-act="demoToggle">▶ Demo mode</button>
+  <button class="link-btn" id="resetBtn" title="Clear saved prototype data in this browser">Reset prototype</button>
+</header>
+
+<main class="layout">
+
+  <!-- ============ STAGE: 3D helmet + rider view ============ -->
+  <section class="stage card" id="stage" aria-label="Helmet and rider view">
+    <div class="stage-head">
+      <div class="seg" role="tablist" aria-label="View">
+        <button id="tabHelmet" class="on" data-act="stage" data-arg="helmet" role="tab"><svg class="i" viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3.3 7L12 12l8.7-5"/><path d="M12 22V12"/></svg>Helmet 3D</button>
+        <button id="tabRider" data-act="stage" data-arg="rider" role="tab"><svg class="i" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>Rider view</button>
+      </div>
+      <div class="sp"></div>
+      <span class="pill" id="stagePill"><span class="d"></span><span id="stagePillText">Helmet off</span></span>
+      <button class="killbtn" id="killBtn" data-act="kill" aria-pressed="false"></button>
+    </div>
+
+    <div class="stage-body">
+      <!-- 3D -->
+      <div class="view on" id="view3d">
+        <div id="gl"></div>
+        <div class="loading" id="loading"><div><div class="spinner"></div>Loading STL parts…</div></div>
+        <div class="tools3d">
+          <div class="swatches" id="swatches" aria-label="Shell colour"></div>
+          <div class="row">
+            <button class="chipbtn" id="explodeBtn" data-act="explode"><svg class="i" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="3"/></svg>Exploded view</button>
+            <button class="chipbtn vbtn" data-act="view" data-arg="front">Front</button>
+            <button class="chipbtn vbtn" data-act="view" data-arg="right">Side</button>
+            <button class="chipbtn vbtn" data-act="view" data-arg="rear">Rear</button>
+            <button class="chipbtn" data-act="view" data-arg="reset">Reset</button>
+          </div>
+        </div>
+        <details class="parts" id="parts"><summary class="chipbtn">STL parts</summary><div id="partsList"></div></details>
+        <div class="hint3d">Drag to rotate · scroll to zoom · press the small button on the right side to trigger the kill switch</div>
+        <div class="infocard" id="infocard"><button class="x" data-act="closeinfo" aria-label="Close">×</button><h4 id="infoTitle"></h4><p id="infoBody"></p><div id="infoAction"></div></div>
+        <details class="dl">
+          <summary class="chipbtn"><svg class="i" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>STL files</summary>
+          <div class="menu">
+            <a class="all" href="models/helmet_assembly.stl" download>Full assembly (.stl)<span>2.5 MB</span></a>
+            <a href="models/helmet_shell.stl" download>Shell<span>helmet_shell.stl</span></a>
+            <a href="models/helmet_liner.stl" download>Liner<span>helmet_liner.stl</span></a>
+            <a href="models/visor.stl" download>Visor<span>visor.stl</span></a>
+            <a href="models/peak.stl" download>Peak &amp; pivots<span>peak.stl</span></a>
+            <a href="models/straps.stl" download>Chin straps<span>straps.stl</span></a>
+            <a href="models/buckle.stl" download>Buckle &amp; rings<span>buckle.stl</span></a>
+            <a href="models/kill_switch.stl" download>Kill switch base<span>kill_switch.stl</span></a>
+            <a href="models/kill_button.stl" download>Kill switch button<span>kill_button.stl</span></a>
+            <a href="models/sensor.stl" download>Sensor<span>sensor.stl</span></a>
+            <a href="models/led_left.stl" download>Rear light, left<span>led_left.stl</span></a>
+            <a href="models/led_right.stl" download>Rear light, right<span>led_right.stl</span></a>
+            <a href="models/dial.stl" download>Fit dial<span>dial.stl</span></a>
+          </div>
+        </details>
+      </div>
+
+      <!-- Rider view -->
+      <div class="view" id="viewRider">
+        <div class="rider" id="rider" data-env="city">
+          <div class="sky"></div>
+          <svg class="skyline" id="skyline" viewBox="0 0 1200 140" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <div class="ground"><div class="plane"></div></div>
+          <div class="vignette"></div>
+          <div class="drops"></div>
+          <div class="glare"></div>
+          <canvas id="hud" width="1200" height="420" aria-label="Heads-up display"></canvas>
+          <canvas id="hudEdge" aria-hidden="true"></canvas>
+          <div class="rim"></div>
+          <div class="cap">Rider’s view through the visor (simulated)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="transport">
+      <button class="tbtn primary" id="playBtn" data-act="play" aria-label="Play or pause ride"></button>
+      <button class="tbtn" data-act="next" title="Jump to the next ride event"><svg class="i" viewBox="0 0 24 24"><path d="M5 4l10 8-10 8z"/><path d="M19 5v14"/></svg>Next event</button>
+      <button class="tbtn" data-act="restart" aria-label="Restart ride"><svg class="i" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+      <div class="progress">
+        <div class="meta"><span id="rideName">No route selected</span><span><b id="rideLeft">—</b></span></div>
+        <div class="bar"><i id="rideBar"></i></div>
+      </div>
+    </div>
+    <div class="quick" id="quick">
+      <span class="muted small" style="align-self:center;margin-right:2px">Simulate:</span>
+      <button class="chipbtn" data-act="sun" id="qSun"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/></svg>Bright sun</button>
+      <button class="chipbtn warn" data-act="wet" id="qWet"><svg class="i" viewBox="0 0 24 24"><path d="M12 2.7l5.7 5.7a8 8 0 1 1-11.4 0z"/></svg>Wet weather</button>
+      <button class="chipbtn" data-act="signal" data-arg="left" id="qSigL"><svg class="i" viewBox="0 0 24 24"><path d="M10 6l-6 6 6 6"/><path d="M4 12h16"/></svg>Signal left</button>
+      <button class="chipbtn" data-act="signal" data-arg="right" id="qSigR"><svg class="i" viewBox="0 0 24 24"><path d="M14 6l6 6-6 6"/><path d="M4 12h16"/></svg>Signal right</button>
+      <button class="chipbtn" data-act="notif"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg>Phone message</button>
+      <button class="chipbtn warn" data-act="dropPhone" id="qPhone"><svg class="i" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>Drop phone</button>
+      <button class="chipbtn warn" data-act="dropNav" id="qNav"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2.1 6.3-6.3 2.1 2.1-6.3z"/></svg>Drop nav app</button>
+    </div>
+  </section>
+
+  <!-- ============ COMPANION APP ============ -->
+  <aside class="phone" aria-label="Companion app">
+    <div class="frame">
+      <div class="screenwrap" id="appwrap">
+        <div class="statusbar"><span id="clock">9:41</span><span class="notch"></span><span class="r"><span>5G</span><span>82%</span></span></div>
+        <div id="screen"></div>
+        <nav class="tabbar" id="tabbar"></nav>
+        <div class="sheet-back" id="sheetBack" data-act="closeSheet"></div>
+        <div class="sheet" id="sheet" hidden></div>
+      </div>
+    </div>
+  </aside>
+
+</main>
+<div id="toasts" aria-live="polite"></div>
+<div class="demobar" id="demoBar" role="status" aria-live="polite"><span class="badge">DEMO</span><div class="txt"><b id="demoTitle"></b><span id="demoText"></span></div><div class="dots" id="demoDots"></div><button class="chipbtn" data-act="demoStop">Take control</button></div>
+<div class="demo-cursor" id="demoCursor" aria-hidden="true"></div>
+
+<script src="vendor/three.min.js"></script>
+<script src="js/models-data.js?v=44"></script>
+<script src="js/stl.js?v=44"></script>
+<script src="js/helmet3d.js?v=44"></script>
+<script src="js/hud.js?v=44"></script>
+<script src="js/ride.js?v=44"></script>
+<script src="js/nav.js?v=44"></script>
+<script src="js/importer.js?v=44"></script>
+<script src="js/app.js?v=44"></script>
+</body>
+</html>
