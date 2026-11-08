@@ -7,6 +7,9 @@ files sits next to a working companion app and a simulated rider's-eye view of t
 in the browser's `localStorage` (key `helmet-proto-v1`); "Reset prototype" clears them. Transient things (kill switch,
 simulated disconnects, ride progress) reset on refresh.
 
+The helmet is meant to work without a cloud. Your rides, routes and settings stay on your own devices, you own the
+helmet and its data, and there are no servers or accounts to depend on. Strava, Garmin and phone maps are optional extras.
+
 ## What's inside
 | Path | Purpose |
 | --- | --- |
