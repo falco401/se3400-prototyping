@@ -31,7 +31,7 @@ helmet and its data, and there are no servers or accounts to depend on. Strava, 
 - Centre guidance is translucent text and icons with a halo, no background panels
 - Trail mode: live distance to next waypoint
 - House numbers shown as a bold yellow tag, distinct from street names
-- Large red kill switch (on the helmet, in the stage controls and in Settings)
+- Kill switch: a small dark push button on the helmet, plus large red buttons in the stage controls and in Settings
 - Directional (stereo-panned) audio cues, wet-weather high-contrast mode, glove mode, battery saver, sensor toggle
 
 ## Demo (store) mode
